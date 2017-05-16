@@ -1,0 +1,17 @@
+<form action="{{ url_for('tasks.edit_task', id=task.id) }}" method="POST">
+    <label>Edit Task:</label>
+    <input type="text" name="name" value="{{ task.name }}">
+    <br>
+
+    <label>Type:</label><br>
+
+    <input {{ arduinoChecked }} type="radio" name="type" value="Arduino"> Arduino<br>
+    <input {{ pythonChecked }} type="radio" name="type" value="Python"> Python<br>
+    <input {{ modelChecked }} type="radio" name="type" value="3D Modeling"> 3D Modeling<br>
+
+    <label>Description:</label>
+    <input type="text" name="description" value="{{ task.description }}">
+    <br>
+
+    <input type="submit" value="Update">
+</form>
