@@ -1,5 +1,77 @@
-<h3>Progress Tracker</h3>
-<a href="{{ url_for('teams.create_route') }}">Create a Team</a>
-<a href="{{ url_for('tasks.create_route') }}">Add a task</a>
-<a href="{{ url_for('teams.select_finish_route') }}">Finish a task?</a>
-<a href="{{ url_for('teams.display_route') }}">See progress</a>
+{% extends "base.html" %}
+
+{% block title %}
+<div class="sixteen wide column">
+<div class="one wide row">
+    <div></div>
+        <h1 class="ui center aligned header">Progress Tracker</h1>
+</div>
+<br>
+{% endblock %}
+
+{% block content %}
+<br>
+<div class="ui grid">
+{% for team in teams %}
+    <div class="stretched row">
+        <div class="four wide column">
+            <div class="ui segment">
+                <h3>Team: {{ team.name }}</h3>
+                <div class=""><b>Grade:</b> {{ team.grade }}</div>
+                {% if team.member1 %}
+                    <div>{{ team.member1 }}</div>
+                {% endif %}
+                {% if team.member2 %}
+                    <div>{{ team.member2 }}</div>
+                {% endif %}
+                {% if team.member3 %}
+                    <div>{{ team.member3 }}</div>
+                {% endif %}
+                {% if team.member4 %}
+                    <div>{{ team.member4 }}</div>
+                {% endif %}
+                <a class="ui right floated mini button" href="{{ url_for('teams.finish_route', team_id=team.id) }}">Finish a task?</a>
+            </div>
+        </div>
+        <div class="one wide column">
+            <div class="one wide row">
+                Arduino
+            </div>
+            <div class="one wide row">
+                3D Modeling
+            </div>
+            <div class="one wide row">
+                Python
+            </div>
+        </div>
+        <div class="eleven wide column">
+            <div class="ui inverted segment">
+                <div class="ui grid">
+                    <div class="one wide row">
+                        {% for task in tasks %}
+                            {% if task.type == "Arduino" and task in team.tasks %}
+                            <div data-tooltip="{{ task.description }}" style="background-color:#54c8ff;width:{{ task.value * 15}}px;height:15px;margin-right:3px;margin-left:3px;border-radius:5px"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="one wide row">
+                        {% for task in tasks %}
+                            {% if task.type == "3D Modeling" and task in team.tasks %}
+                            <div data-tooltip="{{ task.description }}" style="background-color:#db2828;width:{{ task.value * 15}}px;height:15px;margin-right:3px;margin-left:3px;border-radius:5px"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="one wide row">
+                        {% for task in tasks %}
+                            {% if task.type == "Python" and task in team.tasks %}
+                            <div data-tooltip="{{ task.description }}" style="background-color:#fbbd08;width:{{ task.value * 15}}px;height:15px;margin-right:3px;margin-left:3px;border-radius:5px"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

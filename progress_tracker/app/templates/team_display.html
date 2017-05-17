@@ -1,21 +1,82 @@
-{% for team in teams %}
-    <div class="team" style="display:inline-block">
-        <h3>Team: {{ team.name }}</h3>
-        <div>{{ team.grade }}</div>
-        <div>{{ team.member1 }}</div>
-        <div>{{ team.member2 }}</div>
-        <div>{{ team.member3 }}</div>
-        <div>{{ team.member4 }}</div>
+{% extends "base.html" %}
+{% block title %}
+<div class="sixteen wide column">
+<div class="one wide row">
+    <div></div>
+        <h1 class="ui center aligned header">Progress Tracker</h1>
+    <div></div>
+</div>
+{% endblock %}
 
-
-    </div>
-    {% for task in team.tasks %}
-    <div class="task" style="display:inline-block;margin:1em">
-            <b>{{ task.name }}</b>
-            <div>{{ task.type }}</div>
-            <div>{{ task.description }}</div>
-            <a href="{{ url_for('tasks.edit_task', id=task.id) }}">Edit</a>
+{% block content %}
+<div class="ui equal width grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui header">
+                Teams | Tasks
+            </div>
         </div>
-    {% endfor %}
-    <br>
+        {% for task in tasks %}
+            <div class="column">
+                {% if task.type == "Arduino" %}
+                    <div class="ui blue segment">
+                {% elif task.type == "3D Modeling" %}
+                    <div class="ui red segment">
+                {% elif task.type == "Python" %}
+                    <div class="ui yellow segment">
+                {% else %}
+                    <div class="ui black segment">
+                {% endif %}
+                <b>{{ task.name }}</b>
+                <div>{{ task.type }}</div>
+                <div>{{ task.description }}</div>
+                <a href="{{ url_for('tasks.edit_task', id=task.id) }}">Edit</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% for team in teams %}
+    <div class="stretched row">
+        <div class="column">
+            <div class="ui segment">
+                <h3>Team: {{ team.name }}</h3>
+                <div class=""><b>Grade:</b> {{ team.grade }}</div>
+                {% if team.member1 %}
+                    <div>{{ team.member1 }}</div>
+                {% endif %}
+                {% if team.member2 %}
+                    <div>{{ team.member2 }}</div>
+                {% endif %}
+                {% if team.member3 %}
+                    <div>{{ team.member3 }}</div>
+                {% endif %}
+                {% if team.member4 %}
+                    <div>{{ team.member4 }}</div>
+                {% endif %}
+            </div>
+        </div>
+        {% for task in tasks %}
+            {% if task in team.tasks %}
+                <div class="column">
+                    <div class="ui segment">
+                        <div class="ui container center aligned">
+                            <i class="fa fa-check-square-o fa-5x" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="column">
+                    <div class="ui segment">
+                        <div class="ui container center aligned">
+                            <i class="fa fa-square-o fa-5x" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endfor %}
+</div>
+</div>
+{% endblock %}
+

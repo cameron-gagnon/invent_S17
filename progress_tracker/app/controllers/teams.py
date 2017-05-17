@@ -35,7 +35,7 @@ def select_finish_route():
 def finish_route(team_id):
 
     if request.method == 'GET':
-        tasks = models.Task.query.all()
+        tasks = models.Task.query.order_by(models.Task.type).all()
         team = models.Team.query.get(team_id)
         options = {
             'tasks': tasks,
@@ -44,13 +44,16 @@ def finish_route(team_id):
         return render_template('finish_task.html', **options)
 
     else:
+        if not session.get('username'):
+            return redirect(url_for('login_api.login'))
+
         task = models.Task.query.get(request.form.get('task_id'))
         team = models.Team.query.get(team_id)
         if task in team.tasks:
-            return redirect(url_for('teams.display_route'))
+            return redirect(url_for('index.home'))
         team.tasks.append(task)
         db.session.commit()
-        return redirect(url_for('teams.display_route'))
+        return redirect(url_for('index.home'))
 
 
 
@@ -60,8 +63,10 @@ def display_route():
         Displays all the teams and their tasks
     """
     teams = models.Team.query.all()
+    tasks = models.Task.query.all()
     options = {
         'teams': teams,
+        'tasks': tasks,
     }
 
     return render_template('team_display.html', **options)

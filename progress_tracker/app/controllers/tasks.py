@@ -14,6 +14,7 @@ def create_route():
     else:
         task = models.Task(name=request.form['name'],
                            type=request.form['type'],
+                           value=request.form['value'],
                            description=request.form['description'])
 
         print(task)
@@ -38,9 +39,13 @@ def edit_task(id):
         }
         return render_template('edit_task.html', **options)
     else:
+        if not session.get('username'):
+            return redirect(url_for('login_api.login'))
+
         task.name = request.form['name']
         task.type = request.form['type']
         task.description = request.form['description']
+        task.value = request.form['value']
         db.session.commit()
 
         return redirect(url_for('index.home'))
