@@ -1,14 +1,9 @@
 from app import db
 
-task_identifier = db.Table('task_identifier',
-    db.Column('task_id', db.Integer, db.ForeignKey('task.id')),
-    db.Column('team_id', db.Integer, db.ForeignKey('team.id'))
-)
-
 class Team(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    tasks = db.relationship('Task', secondary=task_identifier)
+    tasks = db.relationship('Task')
     grade = db.Column(db.String(5))
     member1 = db.Column(db.Text)
     member2 = db.Column(db.Text)
@@ -22,6 +17,19 @@ class Team(db.Model):
 
 
 class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+    type = db.Column(db.String(80))
+    value = db.Column(db.Integer)
+    description = db.Column(db.Text)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
+
+    def __repr__(self):
+        return 'Task name: {}.\n\tType: {}\n\tDescription: {}'.format(
+                self.name, self.type, self.description)
+
+
+class GenericTask(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     type = db.Column(db.String(80))

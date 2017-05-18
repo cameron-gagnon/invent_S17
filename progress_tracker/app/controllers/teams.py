@@ -25,48 +25,51 @@ def create_route():
 
 @teams.route('/teams/finish', methods=['GET'])
 def select_finish_route():
+    """
+        If no team_id is sent to the /teams/finish route, then we force
+        the user to pick the team
+    """
     teams = models.Team.query.all()
     options = {
         'teams': teams,
     }
     return render_template('select_team.html', **options)
 
-@teams.route('/teams/finish/<int:team_id>', methods=['GET', 'POST'])
+@teams.route('/teams/finish/<int:team_id>', methods=['GET'])
 def finish_route(team_id):
+    """
+        Displays a list of the generic tasks
+    """
 
-    if request.method == 'GET':
-        tasks = models.Task.query.order_by(models.Task.type).all()
-        team = models.Team.query.get(team_id)
-        options = {
-            'tasks': tasks,
-            'team': team,
-        }
-        return render_template('finish_task.html', **options)
-
-    else:
-        if not session.get('username'):
-            return redirect(url_for('login_api.login'))
-
-        task = models.Task.query.get(request.form.get('task_id'))
-        team = models.Team.query.get(team_id)
-        if task in team.tasks:
-            return redirect(url_for('index.home'))
-        team.tasks.append(task)
-        db.session.commit()
+    if request.method != 'GET':
         return redirect(url_for('index.home'))
 
+    team = models.Team.query.get(team_id)
 
+    arduinoTasks = models.GenericTask.query.filter(models.GenericTask.type == 'Arduino').all()
+    modelingTasks = models.GenericTask.query.filter(models.GenericTask.type == '3D Modeling').all()
+    pythonTasks = models.GenericTask.query.filter(models.GenericTask.type == 'Python').all()
 
-@teams.route('/teams/display', methods=['GET'])
-def display_route():
-    """
-        Displays all the teams and their tasks
-    """
-    teams = models.Team.query.all()
-    tasks = models.Task.query.all()
     options = {
-        'teams': teams,
-        'tasks': tasks,
+        'arduinoTasks': arduinoTasks,
+        'modelingTasks': modelingTasks,
+        'pythonTasks': pythonTasks,
+        'team': team,
+    }
+    return render_template('finish_task.html', **options)
+
+@teams.route('/teams/overview/<int:team_id>', methods=['GET'])
+def team_overview(team_id):
+    team = models.Team.query.get(team_id)
+    arduinoTasks = models.Task.query.filter(models.Task.type == 'Arduino').all()
+    modelingTasks = models.Task.query.filter(models.Task.type == '3D Modeling').all()
+    pythonTasks = models.Task.query.filter(models.Task.type == 'Python').all()
+
+    options = {
+        'team': team,
+        'arduinoTasks': arduinoTasks,
+        'modelingTasks': modelingTasks,
+        'pythonTasks': pythonTasks,
     }
 
-    return render_template('team_display.html', **options)
+    return render_template('team_overview.html', **options)

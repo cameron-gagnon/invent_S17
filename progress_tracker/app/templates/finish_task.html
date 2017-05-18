@@ -1,45 +1,80 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="sixteen wide column">
-<h1>Updating tasks for: {{ team.name }}</h1>
-<hr>
-<br>
-<div class="ui stackable grid">
-{% for task in tasks %}
-<div class="four wide column">
-    <form action="{{ url_for('teams.finish_route', team_id=team.id) }}" method="POST">
-        {% if task.type == "Arduino" %}
-            <div class="ui blue segment">
-        {% elif task.type == "3D Modeling" %}
-            <div class="ui red segment">
-        {% elif task.type == "Python" %}
-            <div class="ui yellow segment">
-        {% else %}
-            <div class="ui black segment">
-        {% endif %}
-                <h4>{{ task.name }}</h4>
-                <div><b>Type:</b> {{ task.type }}</div>
-                <div><b>Value:</b> {{ task.value }}</div>
-                <div><b>Details:</b> {{ task.description }}</div>
-                <input type="hidden" value="{{task.id}}" name="task_id">
-                <a href="{{ url_for('tasks.edit_task', id=task.id) }}" class="ui right floated small button">Edit</a>
-                <input type="Submit" value="Finish" class="ui primary button">
+    <br>
+    <h1>Updating tasks for: {{ team.name }}</h1>
+    <hr>
+    <br>
+    <div class="ui stackable grid">
+        <h2>Arduino Tasks</h2>
+        <div class="row">
+            {% for task in arduinoTasks %}
+            <div class="four wide column">
+                <form action="{{ url_for('tasks.edit_task', team_id=team.id) }}" method="GET">
+                    {% if task.type == "Arduino" %}
+                        <div class="ui blue segment">
+                    {% elif task.type == "3D Modeling" %}
+                        <div class="ui red segment">
+                    {% elif task.type == "Python" %}
+                        <div class="ui yellow segment">
+                    {% else %}
+                        <div class="ui black segment">
+                    {% endif %}
+                            <h4>{{ task.name }}</h4>
+                            <div><b>Type:</b> {{ task.type }}</div>
+                            <div><b>Value:</b> {{ task.value }}</div>
+                            <div><b>Details:</b> {{ task.description }}</div>
+                            <input type="hidden" value="{{task.id}}" name="task_id">
+                            <input type="Submit" value="Use as template" class="ui primary button">
+                        </div>
+                </form>
             </div>
-    </form>
-</div>
-{% endfor %}
-<div class="four wide centered column">
-    <div class="ui black segment">
-        <div class="ui container center aligned">
-            <div class="ui message">
-                Don't see the task here? Create it!
+            {% endfor %}
+        </div>
+
+        <h2>3D Modeling Tasks</h2>
+        <div class="row">
+            {% for task in modelingTasks %}
+            <div class="four wide column">
+                <form action="{{ url_for('tasks.edit_task', team_id=team.id) }}" method="GET">
+                    {% if task.type == "Arduino" %}
+                        <div class="ui blue segment">
+                    {% elif task.type == "3D Modeling" %}
+                        <div class="ui red segment">
+                    {% elif task.type == "Python" %}
+                        <div class="ui yellow segment">
+                    {% else %}
+                        <div class="ui black segment">
+                    {% endif %}
+                            <h4>{{ task.name }}</h4>
+                            <div><b>Type:</b> {{ task.type }}</div>
+                            <div><b>Value:</b> {{ task.value }}</div>
+                            <div><b>Details:</b> {{ task.description }}</div>
+                            <input type="hidden" value="{{task.id}}" name="task_id">
+                            <input type="Submit" value="Use as template" class="ui primary button">
+                        </div>
+                </form>
             </div>
-            <a href="{{ url_for('tasks.create_route') }}" class="ui large button secondary">
-                Create new task
-            </a>
+            {% endfor %}
+        </div>
+
+        <h2>Python Tasks</h2>
+        <div class="row">
+            {% for task in pythonTasks %}
+            <div class="four wide column">
+                <form action="{{ url_for('tasks.edit_task', team_id=team.id) }}" method="GET">
+                    <div class="ui yellow segment">
+                        <h4>{{ task.name }}</h4>
+                        <div><b>Type:</b> {{ task.type }}</div>
+                        <div><b>Value:</b> {{ task.value }}</div>
+                        <div><b>Details:</b> {{ task.description }}</div>
+                        <input type="hidden" value="{{task.id}}" name="task_id">
+                        <input type="Submit" value="Use as template" class="ui primary button">
+                    </div>
+                </form>
+            </div>
+            {% endfor %}
         </div>
     </div>
-</div>
-</div>
 </div>
 {% endblock %}

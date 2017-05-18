@@ -22,3 +22,12 @@ def login():
         else:
             session['username'] = escape(username)
             return redirect(url_for('index.home'))
+
+@login_api.route('/logout', methods=['GET'])
+def logout():
+    if session.get('username'):
+        session.pop('username', None)
+
+    return redirect(url_for('index.home'))
+
+

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="sixteen wide column">
-<h1>Select team to update tasks for </h1>
+<h1>Select team to update task for </h1>
 <div class="ui stackable grid">
 {% for team in teams %}
     <div class="four wide column">
         <a href="{{ url_for('teams.finish_route', team_id=team.id) }}">
-            <div class="ui segment">
+            <div class="ui segment link">
                 <h3>Team: {{ team.name }}</h3>
                 <div>
                     <b>Grade:</b> {{ team.grade }}
